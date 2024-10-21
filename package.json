@@ -1,0 +1,35 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
+    "@mdi/font": "^7.4.47",
+    "axios": "^1.7.7",
+    "nuxt": "^3.13.0",
+    "sweetalert2": "^11.14.1",
+    "v-calendar": "^3.1.2",
+    "vue": "latest",
+    "vue-cal": "^4.10.0",
+    "vue-datepicker": "^1.3.0",
+    "vue-router": "latest",
+    "vue-timepicker": "^0.0.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "vite-plugin-vuetify": "^2.0.4",
+    "vuetify": "^3.7.1"
+  }
+}
