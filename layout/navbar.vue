@@ -83,7 +83,7 @@
       </div>
         </div>
 
-      <v-col md="5" class="bg-green mt-7 ml-16 p-4">
+      <v-col md="5" class="bg-green-400 mt-7 ml-16 p-4">
   <h2 class="text-h6">User Bookings Confirm</h2>
   <div>
     <!-- Show only paginated bookings -->

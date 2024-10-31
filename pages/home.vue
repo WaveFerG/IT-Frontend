@@ -1,12 +1,12 @@
 <template>
   <Navbar />
 
-  <div class="flex bg-gray-200"> 
+  <div class="flex bg-gray-200 min-h-screen">
     <div class="fixed flex flex-col mr-10 max-w-xs ">
       <v-sheet elevation="10" class="bg-white" style="max-width: 280px; height: 400px; border-bottom: 1px solid #D3D3D3;">
         <v-btn class="mt-7 ml-5" href="/home">
           <svg color="#757575" class="h-8 w-8"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <polyline points="5 12 3 12 12 3 21 12 19 12" />  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-          <span class="text-h6 ml-2 text-gray-500">Home</span>
+          <span class="text-h6 ml-2 text-gray-500">หน้าหลัก</span>
         </v-btn>
         <v-btn class="mt-7 ml-5" href="/bookinghistory">
           <svg  color="#757575" class="h-8 w-8"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -197,7 +197,7 @@
         <v-select
           v-model="bookingStartHour"
           :items="hours"
-          label="ชั่วโมง"
+          label="เวลา"
           class="mr-2"
         ></v-select>
         <v-select
@@ -212,7 +212,7 @@
         <v-select
           v-model="bookingEndHour"
           :items="filteredEndHours"
-          label="ชั่วโมง"
+          label="เวลา"
           class="mr-2"
         ></v-select>
         <v-select
@@ -248,7 +248,7 @@
 
 
 
-    <div class="ml-72 flex flex-col my-32 ">
+<div class="fixed  flex flex-col my-32 z-10" style="margin-left: 1500px;">
       <v-card elevation="16" width="250" height="300">
         <v-card-title class="bg-blue text-center">ส่วนของผู้ใช้</v-card-title>
         <div class="ml-5 mt-7">
@@ -276,12 +276,7 @@
         <div  class="ml-5 mt-5">
           <a href="/editroom" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> จัดการข้อมูลห้องประชุม</a>
         </div>
-        <div class="ml-5 mt-5">
-          <a class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> ข้อมูลห้องประชุม</a>
-        </div>
-        <div class="ml-5 mt-5">
-          <a class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> ข้อมูลห้องประชุม</a>
-        </div>
+        
       </v-card>
     </div>
   </div>

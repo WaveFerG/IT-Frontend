@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center bg-gradient-to-b from-blue-200 to-blue-50">
-    <v-sheet class="p-8 w-full max-w-lg" elevation="5" style="background-color: #ffffff; border-radius: 20px;">
+    <v-sheet class="px-8 w-full max-w-lg" elevation="5" style="background-color: #ffffff; border-radius: 20px;">
       <div class="flex items-center mb-6">
         <img src="/icon.jpg" class="w-36 h-36 rounded-full  " alt="Logo">
         <h1 class="text-blue-800 font-bold text-5xl my-2 mx-1 flex items-center">Sign Up</h1>
