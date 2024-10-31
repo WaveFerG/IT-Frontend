@@ -1,14 +1,14 @@
 <template>
-  <v-container class="flex items-center justify-center">
-    <v-sheet class="my-5 p-8 w-full max-w-lg" elevation="5" style="background-color: #eeeeee; border-radius: 20px;">
-      <div class="flex items-center mb-6">
-        <img src="/image/wfg.jpg" class="w-24 h-24 rounded-full" alt="Logo">
-        <h1 class="text-blue-800 font-bold text-5xl my-2 mx-3 flex items-center">Login</h1>
+  <div class="flex items-center justify-center bg-gradient-to-b from-blue-200 to-blue-50 min-h-screen w-full">
+    <v-sheet class="my-5 p-8 w-full max-w-lg " elevation="5" style="background-color: #ffffff; border-radius: 20px;">
+      <div class="flex items-center mb-6 ">
+        <img src="/icon.jpg" class="w-36 h-36 rounded-full  " alt="Logo">
+        <h1 class="text-blue-800 font-bold text-5xl my-2 mx-1 flex items-center">Login</h1>
       </div>
 
       <v-form @submit.prevent="submitLogin">
-        <v-text-field v-model="login.username" label="Username" variant="outlined" outlined></v-text-field>
-        <v-text-field v-model="login.password" label="Password" type="password" variant="outlined" outlined></v-text-field>
+        <v-text-field v-model="login.username" label="ชื่อผู้ใช้" variant="outlined" outlined></v-text-field>
+        <v-text-field v-model="login.password" label="รหัสผ่าน" type="password" variant="outlined" outlined></v-text-field>
         <v-btn type="submit" color="primary" class="w-full m-2">
           <span class="font-bold">Login</span>
         </v-btn>
@@ -16,24 +16,26 @@
           {{ errorMessage }}
         </div>
         <div class="flex items-center mb-2">
-          <h1 class="mx-3 text-base">Don't have an account? </h1>
+          <h1 class="mx-3 text-base">ไม่มีบัญชีผู้ใช้สมัครได้ที่นี่</h1>
           <a class="text-blue-800" href="/signup"> Sign up </a>
         </div>
-        <a class="mx-3 text-blue-500" href="#" @click.prevent="openForgotPasswordDialog"> Forgot password? </a>
+        <a class="mx-3 text-blue-500" href="#" @click.prevent="openForgotPasswordDialog">หากคุณลืมรหัสผ่าน? </a>
       </v-form>
 
       <!-- Forgot Password Dialog -->
       <v-dialog v-model="forgotPasswordDialog" max-width="400px">
         <v-card>
           <v-card-title>
-            <span class="headline">Forgot Password</span>
+            <span class="headline">ลืมรหัสผ่าน</span>
           </v-card-title>
+          <span class="ml-10">โปรดกรอก อีเมล ที่ท่านใช้สมัคร</span>
+          
           <v-card-text>
-            <v-text-field v-model="forgotPasswordEmail" label="Email" type="email" required></v-text-field>
+            <v-text-field v-model="forgotPasswordEmail" label="อีเมล" type="email" required></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn text @click="forgotPasswordDialog = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="submitForgotPassword">Submit</v-btn>
+            <v-btn text @click="forgotPasswordDialog = false">ยกเลิก</v-btn>
+            <v-btn text color="primary" @click="submitForgotPassword">ยืนยัน</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -42,15 +44,16 @@
       <v-dialog v-model="confirmationCodeDialog" max-width="400px">
         <v-card>
           <v-card-title>
-            <span class="headline">Enter Confirmation Code</span>
+            <span class="headline">ใส่โค้ดยืนยันลืมรหัสผ่าน</span>
           </v-card-title>
+          <span class="ml-10">โปรดกรอกโค้ดที่ท่านได้รับทาง อีเมล</span>
           <v-card-text>
-            <v-text-field v-model="confirmationCode" label="Confirmation Code" required></v-text-field>
+            <v-text-field v-model="confirmationCode" label="โค้ดยืนยัน" required></v-text-field>
             <div v-if="timeLeft > 0" class="mt-2">
               <p>Time left: {{ formatTime(timeLeft) }}</p>
             </div>
             <div v-else class="mt-2 text-red-500">
-              <p>Time expired. Please request a new code.</p>
+              <p>เวลาหมดแล้ว โปรดขอโค้ดยืนยันรหัสผ่านใหม่</p>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -64,11 +67,11 @@
       <v-dialog v-model="resetPasswordDialog" max-width="400px">
         <v-card>
           <v-card-title>
-            <span class="headline">Reset Password</span>
+            <span class="headline">รีเซ็ท รหัสผ่าน</span>
           </v-card-title>
           <v-card-text>
-            <v-text-field v-model="newPassword" label="New Password" type="password" required></v-text-field>
-            <v-text-field v-model="repeatPassword" label="Repeat Password" type="password" required></v-text-field>
+            <v-text-field v-model="newPassword" label="รหัสผ่านใหม่" type="password" required></v-text-field>
+            <v-text-field v-model="repeatPassword" label="ใส่รหัสผ่านใหม่อีกครั้ง" type="password" required></v-text-field>
           </v-card-text>
           <v-card-actions>
             <v-btn text @click="resetPasswordDialog = false">Cancel</v-btn>
@@ -85,7 +88,7 @@
         </template>
       </v-snackbar>
     </v-sheet>
-  </v-container>
+  </div>
 </template>
 
 <script setup>
@@ -136,8 +139,8 @@ const submitLogin = async () => {
       console.log('Logged in with User:', response.data.result);
 
       Swal.fire({
-        title: 'Login successful!',
-        text: 'You will be redirected shortly.',
+        title: 'Login สำเร็จแล้ว!',
+        text: 'คุณจะถูกเปลี่ยนเส้นทางในไม่ช้า.',
         icon: 'success',
         timer: 1000,
         showConfirmButton: false
@@ -152,7 +155,7 @@ const submitLogin = async () => {
         title: 'Error',
         text: errorMessage,
         icon: 'error',
-        confirmButtonText: 'Try Again'
+        confirmButtonText: 'โปรดลองใหม่อีกครั้ง'
       });
     }
   } catch (error) {
@@ -162,7 +165,7 @@ const submitLogin = async () => {
       title: 'Error',
       text: errorMsg,
       icon: 'error',
-      confirmButtonText: 'Try Again'
+      confirmButtonText: 'โปรดลองใหม่อีกครั้ง'
     });
   }
 };

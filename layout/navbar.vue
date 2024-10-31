@@ -3,10 +3,10 @@
     <v-container fluid class="py-1">
       <v-row>
         <v-col class="flex items-center">
-          <img src="/image/wfg.jpg" class="w-8 h-8 rounded-full mb-5" alt="Logo">
+          <img src="/icon.jpg" class="w-16 h-16 rounded-full " alt="Logo">
           <v-col>
             <div class="font-weight-bold">
-              Conference room<br>
+              Conference Room<br>
               <span class="text-blue-800 text-h5 font-weight-bold">Booking</span>
             </div>
           </v-col>
@@ -27,6 +27,27 @@
             <v-icon>mdi-account</v-icon>
             <span>Account</span>
           </v-btn>
+
+          <v-btn 
+  v-if="isLoggedIn" 
+  class="ml-3" 
+  @click="logout" 
+  elevation="2" 
+  style="width: 100px;"
+>
+  <v-icon left>mdi-logout</v-icon>
+  Logout
+</v-btn>
+
+<v-btn 
+  v-else 
+  class="ml-3" 
+  href="/login"
+>
+  <v-icon>mdi-login</v-icon>
+  <span>login</span>
+</v-btn>
+
         </v-col>
       </v-row>
 
@@ -62,33 +83,32 @@
       </div>
         </div>
 
-        <v-col md="5" class="bg-green mt-7 ml-16">
-          <h2 class="text-h6">User Bookings Confirm</h2>
-          <v-list>
-            <v-list-item-group>
-              <!-- Show only paginated bookings -->
-              <v-list-item v-for="booking in paginatedBookings" :key="booking.booking_id">
-                <v-list-item-content>
-                  <v-list-item-title>
-                    Booking ID: {{ booking.booking_id }} - {{ booking.purpose }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    Date: {{ formatDate(booking.booking_date) }} | Time: {{ booking.start_time }} - {{ booking.end_time }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-          
-          <!-- Pagination component -->
-          <v-pagination
-            v-model="currentPage"
-            :length="pageCount"
-            :total-visible="7"
-            class="mt-5"
-            @input="onPageChange"
-          ></v-pagination>
-        </v-col>
+      <v-col md="5" class="bg-green mt-7 ml-16 p-4">
+  <h2 class="text-h6">User Bookings Confirm</h2>
+  <div>
+    <!-- Show only paginated bookings -->
+    <ul class="list-none p-0">
+      <li v-for="booking in paginatedBookings" :key="booking.booking_id" class="border-b border-gray-300 py-2 bg-white rounded-md shadow-sm">
+        <div class="p-2">
+          <span class="font-bold">Booking ID:</span> {{ booking.booking_id }} - {{ booking.purpose }}<br>
+          <span class="font-semibold">Date:</span> {{ formatDate(booking.booking_date) }} | 
+          <span class="font-semibold">Time:</span> {{ booking.start_time }} - {{ booking.end_time }}
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Pagination component -->
+  <v-pagination
+    v-model="currentPage"
+    :length="pageCount"
+    :total-visible="7"
+    class="mt-5"
+    @input="onPageChange"
+  ></v-pagination>
+</v-col>
+
+
       </div>
     </v-card>
   </v-dialog>
@@ -100,7 +120,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 
@@ -140,9 +160,11 @@ if (route.path === '/home') {
   showDialog.value = true; // Show dialog only on home
 }
 
+const isLoggedIn = ref(false);
 // Fetch user data and bookings when component is mounted
 onMounted(() => {
   const userData = localStorage.getItem('user');
+  isLoggedIn.value = !!userData;
   
   if (userData) {
     const parsedUserData = JSON.parse(userData);
@@ -207,6 +229,15 @@ const fetchNews = async () => {
 onMounted(() => {
   fetchNews();
 });
+
+
+const logout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    console.log('User logged out');
+    window.location.href = '/login';
+  };
+  
 </script>
 
 <style scoped>

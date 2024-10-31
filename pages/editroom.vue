@@ -97,7 +97,7 @@
           <v-container>
             <v-row>
               <v-col v-for="room in filteredRooms" :key="room.room_id" class="mb-5" cols="12">
-                <v-card class="rounded-xl overflow-hidden shadow-lg" style="display: flex; height: auto;">
+                <v-card class="rounded-xl overflow-hidden shadow-lg" style="display: flex; height: auto; width: 1200px;">
                   <div class="m-5" style="width: 500px; height: 320px">
                     <v-img :src="`http://localhost:8000/${room.room_image}`" height="100%" width="100%" cover />
                   </div>
@@ -109,10 +109,20 @@
                     <h1 class="mb-5">สิ่งอำนวยความสะดวก: {{ room.amenities }}<br></h1>
                   
   
-                    <div style="margin-top:75px;">
+                    <div style="margin-top:65px;">
                       <v-btn class="m-3" color="#3399FF" @click="editRoom(room)">แก้ไขห้อง</v-btn>
                       <v-btn @click="deleteRoom(room.room_id)" color="red" class="text-white">ลบห้อง</v-btn>
-                      <v-btn  color="green" class="text-white">เพิ่มรายละเอียดห้อง</v-btn>
+                    
+                
+                    </div>
+                    <div>
+                      <v-btn color="#778899" class="text-white ml-3 " @click="fetchRoomDetails(room.room_id)">
+                          แก้ไขรายละเอียดห้อง
+                       </v-btn>
+
+                      <v-btn  @click="openDetailForm(room.room_id)" color="green" class="text-white ml-3">
+                          เพิ่มรายละเอียดห้อง
+                       </v-btn>
                     </div>
                   </div>
                 </v-card>
@@ -122,6 +132,63 @@
         </div>
       </div>  
     </div>
+
+    <v-dialog v-model="showRoomDetailsDialog" max-width="1000px">
+  <v-card>
+    <v-card-title class="text-xl font-bold">รายละเอียดห้องประชุม</v-card-title>
+    <v-card-text>
+      <div v-if="roomDetails">
+        <v-row>
+          <v-col v-for="detail in roomDetails" :key="detail.detail_id" cols="4" class="mb-1">
+            <v-img :src="`http://localhost:8000/${detail.image_url}`" height="200" width="100%" />
+          </v-col>
+        </v-row>
+      </div>
+      <div v-else>
+        <p>กำลังโหลดรายละเอียด...</p>
+      </div>
+      <p class="p-10">
+        <span class="font-semibold">รายละเอียดห้อง : </span>
+        <span v-if="roomDescription">{{ roomDescription.description_text }}</span>
+        <span v-else>ยังไม่มีข้อมูลคำอธิบาย</span>
+      </p>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="red" @click="() => { deleteRoomDetails(selectedRoomId.valueOf) }">ลบรายละเอียดห้อง</v-btn>
+
+
+
+      <v-btn @click="showRoomDetailsDialog = false">ปิด</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+
+
+     <v-dialog v-model="showDetailForm" max-width="600px">
+  <v-card>
+    <v-card-title>
+      <span class="headline">เพิ่มรายละเอียดห้องประชุม</span>
+    </v-card-title>
+    <v-card-text>
+      <v-file-input v-model="roomDetails.uploadFiles" label="เลือกรูปภาพ (อัพโหลดหลายรูป)" multiple></v-file-input>
+      
+      <v-textarea 
+        v-model="roomDetails.description" 
+        label="คำอธิบาย" 
+        outlined 
+        rows="3"
+        clearable
+        request
+      ></v-textarea>
+
+    </v-card-text>
+    <v-card-actions>
+      <v-btn @click="uploadRoomDetails" color="primary">อัพโหลด</v-btn>
+      <v-btn @click="() => { showDetailForm = false; resetRoomDetailsForm(); }" color="red">ยกเลิก</v-btn> <!-- Reset on cancel -->
+    </v-card-actions>
+  </v-card>
+</v-dialog>
   
     <v-dialog v-model="showEditForm" max-width="600px">
   <v-card>
@@ -497,6 +564,231 @@ const deleteRoom = async (roomId: string) => {
         }
     }
 };
+
+const showDetailForm = ref(false); // Toggle dialog for room details upload
+const selectedRoomId = ref(''); // Store room ID for the room being edited
+
+const roomDetails = ref({
+  uploadFiles: [] as File[], // For storing multiple image files
+});
+
+
+
+const resetRoomDetailsForm = () => {
+  roomDetails.value.uploadFiles = []; // Clear the file input
+  roomDetails.value.description = ''; // Clear the description
+};
+
+const uploadRoomDetails = async () => {
+  
+  // ตรวจสอบว่าได้เลือกไฟล์หรือไม่
+  if (!roomDetails.value.uploadFiles.length) {
+    showDetailForm.value = false;
+    Swal.fire({
+      icon: 'warning',
+      title: 'กรุณาเลือกไฟล์รูปภาพ',
+    });
+    resetRoomDetailsForm(); // Clear inputs on validation failure
+    return;
+  }
+
+  // ตรวจสอบว่าได้กรอกคำอธิบายหรือไม่
+  if (!roomDetails.value.description || roomDetails.value.description.trim() === '') {
+    showDetailForm.value = false;
+    Swal.fire({
+      icon: 'warning',
+      title: 'กรุณากรอกคำอธิบาย',
+    });
+    resetRoomDetailsForm(); // Clear inputs on validation failure
+    return;
+  }
+
+  // เตรียม FormData สำหรับไฟล์ที่อัปโหลด
+  const formData = new FormData();
+  roomDetails.value.uploadFiles.forEach((file) => {
+    formData.append('uploadDetail', file);
+  });
+
+  const token = localStorage.getItem('token'); // ดึง token จาก localStorage
+
+  try {
+    // อัปโหลดรายละเอียดห้องรวมถึงภาพ
+    const response = await axios.post(
+      `http://localhost:8000/meetingrooms/postmeetingroomdetail/${selectedRoomId.value}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // ตรวจสอบผลลัพธ์จากการอัปโหลดไฟล์
+    if (response.data.status === 'success') {
+      // ถ้าสำเร็จ ให้ส่งคำอธิบาย
+      const descriptionResponse = await axios.post(
+        `http://localhost:8000/meetingrooms/addDescription`,
+        {
+          room_id: selectedRoomId.value,
+          description_text: roomDetails.value.description,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // จัดการผลลัพธ์จากการอัปโหลดคำอธิบาย
+      if (descriptionResponse.data.status === 'success') {
+        showDetailForm.value = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'เพิ่มรายละเอียดห้องสำเร็จ',
+          timer: 1000,
+        });
+        location.reload(); // รีเฟรชหน้าเพื่อติดตามการอัปเดต
+      } else {
+        showDetailForm.value = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: descriptionResponse.data.message || 'การเพิ่มคำอธิบายล้มเหลว กรุณาลองใหม่',
+        });
+        resetRoomDetailsForm(); // Clear the form on failure
+      }
+    } else {
+      showDetailForm.value = false;
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: response.data.message || 'การอัพโหลดล้มเหลว กรุณาลองใหม่',
+      });
+      resetRoomDetailsForm(); // Clear the form on failure
+    }
+  } catch (error) {
+    console.error('Error uploading room details:', error);
+    showDetailForm.value = false;
+    Swal.fire({
+      icon: 'error',
+      title: 'เกิดข้อผิดพลาด',
+      text: 'ไม่สามารถอัพโหลดรูปภาพได้ กรุณาลองใหม่',
+    });
+    resetRoomDetailsForm(); // Clear the form on error
+  }
+};
+
+
+
+const showRoomDetailsDialog = ref(false);
+const roomDescription = ref(null);
+
+const fetchRoomDetails = async (roomId: any) => {
+  selectedRoomId.value = roomId;
+  try {
+    const response = await axios.get(`http://localhost:8000/meetingrooms/getmeetingroomdetail/${roomId}`);
+    if (response.data.status === "success") {
+      roomDetails.value = response.data.result;
+      showRoomDetailsDialog.value = true;
+      console.log('Room Images:', response.data.result);
+    } 
+    const response2 = await axios.get(`http://localhost:8000/meetingrooms/getDescriptionByroom/${roomId}`);
+    if (response2.data.status === "success") {
+      roomDescription.value = response2.data.data;
+      showRoomDetailsDialog.value = true;
+      console.log('Room description:', response2.data.data);
+    } 
+  } catch (error) {
+    showRoomDetailsDialog.value = false;
+    await Swal.fire({
+      title: 'เกิดข้อผิดพลาด',
+      text: 'ไม่มีรายละเอียดห้องโปรดเพิ่มรายละเอียด',
+      icon: 'error',
+      confirmButtonText: 'ตกลง'
+    });
+  }
+  // Fetch description as before
+};
+
+const openDetailForm = async (roomId: string) => {
+  console.log("Opening detail form for room ID:", roomId); // Debug log
+  selectedRoomId.value = roomId;
+  
+
+  try {
+    const response = await axios.get(`http://localhost:8000/meetingrooms/getmeetingroomdetail/${roomId}`);
+    console.log("API Response:", response.data); // Debug log
+
+    if (response.data.status === "success") {
+
+        await Swal.fire({
+          title: 'ไม่สามารถเพิ่มรายละเอียดห้องได้',
+          text: 'ห้องนี้มีรายละเอียดอยู่แล้ว!',
+          icon: 'warning',
+          confirmButtonText: 'ตกลง'
+        });
+        return;
+    }
+ 
+  } catch (error) {
+    console.error("Error fetching room details:", error); // Debug log
+    showDetailForm.value = true; 
+  }
+};
+const deleteRoomDetails = async (selectedRoomId) => {
+
+  const roomId1 = selectedRoomId.value
+
+  if (!roomId1) {
+    await Swal.fire({
+      title: 'เกิดข้อผิดพลาด',
+      text: 'ไม่พบห้องประชุมที่เลือก',
+      icon: 'error',
+      confirmButtonText: 'ตกลง'
+    });
+    return;
+  }
+
+  try {
+    // ลบรูปภาพห้องประชุม
+    const deleteImagesResponse = await axios.delete(`http://localhost:8000/meetingrooms/deleteimageRoomDetailByRoomID/${roomId1}`);
+    if (deleteImagesResponse.data.status === "success") {
+      console.log("ลบรูปภาพสำเร็จ");
+    }
+
+    // ลบคำอธิบายห้องประชุม
+    const deleteDescriptionResponse = await axios.delete(`http://localhost:8000/meetingrooms/deleteDescription/${roomId1}`);
+    if (deleteDescriptionResponse.data.status === "success") {
+      console.log("ลบคำอธิบายสำเร็จ");
+    }
+
+    // อัปเดตการแสดงผล UI
+    roomDetails.value = null;
+    roomDescription.value = null;
+    showRoomDetailsDialog.value = false;
+
+    // แสดงการแจ้งเตือนการลบสำเร็จ
+    await Swal.fire({
+      title: 'ลบรายละเอียดสำเร็จ',
+      text: 'รายละเอียดห้องประชุมถูกลบเรียบร้อยแล้ว',
+      icon: 'success',
+      confirmButtonText: 'ตกลง'
+    });
+    location.reload();
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการลบรายละเอียดห้อง:", error);
+    await Swal.fire({
+      title: 'เกิดข้อผิดพลาด',
+      text: 'ไม่สามารถลบรายละเอียดห้องประชุมได้',
+      icon: 'error',
+      confirmButtonText: 'ตกลง'
+    });
+  }
+};
+
+
+
 
 
   const searchQuery = ref('');

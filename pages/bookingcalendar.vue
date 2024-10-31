@@ -107,7 +107,7 @@
   import Swal from 'sweetalert2'; 
  
   
-  const bookings = ref([]);
+
 const loading = ref(true);
 const error = ref('');
 const dialog = ref(false);
@@ -137,7 +137,7 @@ const fetchUser = async (userId: string) => {
       console.error('Failed to fetch user data:', data.message);
     }
   } catch (err) {
-    console.error('Error fetching data:', err.message);
+    console.error('Error fetching data:', String(err));
   }
 };
 
@@ -160,7 +160,7 @@ const fetchUser = async (userId: string) => {
         error.value = 'Failed to fetch bookings.';
       }
     } catch (err) {
-      error.value = 'Error fetching data: ' + err.message;
+      error.value = 'Error fetching data: ' + String(err);
     } finally {
       loading.value = false;
     }
@@ -183,6 +183,22 @@ const fetchUser = async (userId: string) => {
 
   dialog.value = true; // Open the modal
 };
+
+
+
+interface Booking {
+   booking_id: string;
+   room_id: string;
+   purpose: string;
+   booking_date: string;
+   start_time: string;
+   end_time: string;
+   created_at: string;
+   updated_at: string;
+   user_id: string;
+}
+
+const bookings = ref<Booking[]>([]);
 
 const calendarOptions = computed(() => ({
     plugins: [dayGridPlugin, interactionPlugin],
@@ -244,7 +260,7 @@ const confirmBooking = async (bookingId: string) => {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: `An error occurred: ${error.message}`,
+      text: `An error occurred: ${String(error)}`,
     });
   }
 };
@@ -283,7 +299,7 @@ const cancleBooking = async (bookingId: string) => {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: `An error occurred: ${error.message}`,
+      text: `An error occurred: ${String(error)}`,
     });
   }
 };

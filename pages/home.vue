@@ -5,13 +5,20 @@
     <div class="fixed flex flex-col mr-10 max-w-xs ">
       <v-sheet elevation="10" class="bg-white" style="max-width: 280px; height: 400px; border-bottom: 1px solid #D3D3D3;">
         <v-btn class="mt-7 ml-5" href="/home">
-          <v-icon class="mb-2" color="#757575" size="30">mdi-home</v-icon>
+          <svg color="#757575" class="h-8 w-8"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <polyline points="5 12 3 12 12 3 21 12 19 12" />  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
           <span class="text-h6 ml-2 text-gray-500">Home</span>
         </v-btn>
         <v-btn class="mt-7 ml-5" href="/bookinghistory">
-          <v-icon class="mb-2" size="30" color="#757575">mdi-home</v-icon>
+          <svg  color="#757575" class="h-8 w-8"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+         </svg>
           <span class="text-h6 ml-2 text-gray-500">ประวัติการจอง</span>
         </v-btn>
+        <v-btn class="mt-7 ml-5" href="/calendar">
+          <v-icon  size="30" color="#757575">mdi-calendar</v-icon>
+          <span class="text-h6 ml-2 text-gray-500">ปฏิทินการจอง</span>
+        </v-btn>
+        
       </v-sheet>
 
       <v-sheet elevation="10" class="bg-white flex-auto" style="max-width: 280px; height: 100dvh;">
@@ -36,7 +43,7 @@
           <template v-slot:activator="{ props }">
             <v-btn v-bind="props" class="mt-10 ml-10">
               <v-icon>mdi-home</v-icon>
-              ขนาดห้อง v
+              ขนาดห้อง <v-icon size="20px">mdi-menu-down</v-icon>
             </v-btn>
           </template>
           <v-list>
@@ -56,7 +63,7 @@
   <template v-slot:activator="{ props }">
     <v-btn v-bind="props" class="mt-10 ml-4">
       <v-icon>mdi-home</v-icon>
-      อุปกรณ์ v
+      อุปกรณ์  <v-icon size="20px">mdi-menu-down</v-icon>
     </v-btn>
   </template>
   <v-list>
@@ -83,7 +90,7 @@
             v-model="searchQuery" 
             append-inner-icon="mdi-magnify"
             density="compact"
-            label="ค้นหาห้อง"
+            label="ค้นหาด้วยชื่อห้อง"
             variant="solo"
             hide-details
             single-line
@@ -95,16 +102,17 @@
         <v-container>
           <v-row>
             <v-col v-for="room in filteredRooms" :key="room.room_id" class="mb-5" cols="12">
-              <v-card class="rounded-xl overflow-hidden shadow-lg" style="display: flex; height: auto;">
+              <v-card class="rounded-xl overflow-hidden shadow-lg" style="display: flex;  width: 1100px; height: auto;">
                 <div class="m-5" style="width: 500px; height: 320px">
                   <v-img :src="`http://localhost:8000/${room.room_image}`" height="100%" width="100%" cover />
                 </div>
-                <div class="flex-1 pt-5">
-                  <v-card-title class="text-lg font-semibold">{{ room.room_name }}</v-card-title>
+                <div class="flex-1 pt-5 ml-10">
+                  <v-card-title class="text-lg font-semibold mb-3">{{ room.room_name }}</v-card-title>
+                  <h1 class="mb-5">ไอดีห้อง : {{ room.room_id }}<br></h1>
                   <h1 class="mb-5">ขนาดบรรจุ: {{ room.capacity }}<br></h1>
                   <h1 class="mb-5">ที่ตั้ง: {{ room.location }}<br></h1>
                   <h1 class="mb-5">สิ่งอำนวยความสะดวก: {{ room.amenities }}<br></h1>
-                  <div style="margin-top:75px;">
+                  <div style="margin-top:50px;">
                     <v-btn class="m-3" color="#3399FF" @click="openDialog(room)">จองห้องนี้</v-btn>
                     <v-btn color="#778899" class="text-white" @click="fetchRoomDetails(room.room_id)">รายละเอียดเพิ่มเติม</v-btn>
 
@@ -118,23 +126,29 @@
     </div>  
     
     <v-dialog v-model="showRoomDetailsDialog" max-width="1000px">
-  <v-card>
+       <v-card>
     <v-card-title class="text-xl font-bold">
       รายละเอียดห้องประชุม
     </v-card-title>
     <v-card-text>
-      <div v-if="roomDetails" class="d-flex ">
-        <v-img v-for="detail in roomDetails" :key="detail.detail_id" :src="`http://localhost:8000/${detail.image_url}`" height="200" width="200" class="ma-2" />
-        
-        
-      </div>
+      <div v-if="roomDetails">
+  <v-row>
+    <v-col v-for="detail in roomDetails" :key="detail.detail_id" cols="4" class="mb-1">
+      <v-img :src="`http://localhost:8000/${detail.image_url}`" height="200" width="100%" />
+    </v-col>
+  </v-row>
+</div>
       
        
       <div v-else>
         <p>กำลังโหลดรายละเอียด...</p>
       </div>
 
-      <p class="p-10"> <span class="font-semibold">รายละเอียดห้อง : </span> {{ roomDetails[0].description }}</p>
+      <p class="p-10">
+      <span class="font-semibold">รายละเอียดห้อง : </span>
+      <span v-if="roomDescription">{{ roomDescription.description_text }}</span>
+      <span v-else>ยังไม่มีข้อมูลคำอธิบาย</span>
+    </p>
 
     </v-card-text>
     <v-card-actions>
@@ -234,33 +248,36 @@
 
 
 
-    <div class="mx-32 flex flex-col my-28">
+    <div class="ml-72 flex flex-col my-32 ">
       <v-card elevation="16" width="250" height="300">
         <v-card-title class="bg-blue text-center">ส่วนของผู้ใช้</v-card-title>
-        <div class="ml-7 mt-7">
-          <a href="/home" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg">> จองห้องประชุม</a>
+        <div class="ml-5 mt-7">
+          <a href="/home" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"> <v-icon>mdi-chevron-right</v-icon> จองห้องประชุม</a>
         </div>
-        <div class="ml-7 mt-5">
-          <a href="/bookinghistory" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg">> ประวัติการจอง</a>
+        <div class="ml-5 mt-5">
+          <a href="/bookinghistory" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> ประวัติการจอง</a>
         </div>
-        <div class="ml-7 mt-5">
-          <a href="/calendar" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg">> ปฏิทินการจองห้องประชุม</a>
+        <div class="ml-5 mt-5">
+          <a href="/calendar" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> ปฏิทินการจองห้องประชุม</a>
+        </div>
+        <div class="ml-5 mt-5">
+          <a href="/account" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> แก้ไขข้อมูลบัญชี</a>
         </div>
       </v-card>
 
       <v-card v-if="user.role && user.role === 'admin'" class="mx-auto my-5" elevation="16" width="250" height="300">
         <v-card-title class="bg-blue text-center">ส่วนของผู้ดูแลระบบ</v-card-title>
-        <div class="ml-7 mt-7">
-          <a href="/bookingcalendar" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg">> ปฏิทินการจองห้องประชุม</a>
+        <div class="ml-5 mt-7">
+          <a href="/bookingcalendar" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> จัดการการจองในปฏิทิน</a>
         </div>
-        <div class="ml-7 mt-5">
-          <a href="/news" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg">> จัดการข่าวประกาศ</a>
+        <div class="ml-5 mt-5">
+          <a href="/news" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> จัดการข่าวประกาศ</a>
         </div>
-        <div  class="ml-7 mt-5">
-          <a href="/editroom" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg">> จัดการข้อมูลห้องประชุม</a>
+        <div  class="ml-5 mt-5">
+          <a href="/editroom" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> จัดการข้อมูลห้องประชุม</a>
         </div>
-        <div class="ml-7 mt-5">
-          <a class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg">> ข้อมูลห้องประชุม</a>
+        <div class="ml-5 mt-5">
+          <a class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> ข้อมูลห้องประชุม</a>
         </div>
       </v-card>
     </div>
@@ -341,7 +358,6 @@ const fetchUserData = async (id:any) => {
   try {
     const response = await axios.get(`http://localhost:8000/users/getusersid/${id}`);
     user.value = response.data.result; // Set the user data
-    console.log(response.data.result)
   } catch (error) {
     console.error('Error fetching user data:', error);
   }
@@ -353,7 +369,7 @@ onMounted(async () => {
   if (userData) {
     const parsedUserData = JSON.parse(userData);
     const userId = parsedUserData.user_id; // Extract user_id from parsed data
-    console.log(userId)
+    console.log('userid',userId)
     
     if (userId) {
       fetchUserData(userId); // Fetch user data using the user_id
@@ -369,7 +385,7 @@ onMounted(async () => {
     try {
         const roomsResponse = await axios.get('http://localhost:8000/meetingrooms/getmeetingroom');
         rooms.value = roomsResponse.data; 
-        console.log(roomsResponse.data);
+        console.log('room',roomsResponse.data);
     } catch (error) {
         console.error('Error fetching meeting rooms:', error);
     }
@@ -381,9 +397,12 @@ onMounted(async () => {
 const showDialog = ref(false);
 const selectedRoom = ref<Room | null>(null);
 
-const openDialog = (room: Room) => {
+const openDialog = (room:any) => {
   selectedRoom.value = room;
   showDialog.value = true;
+  
+  // ดึงข้อมูลการจองเฉพาะห้องที่เลือก
+  fetchPendingBookingsByRoomId(room.room_id);
 };
 
 
@@ -466,10 +485,9 @@ const confirmBooking = async () => {
       icon: 'success',
       confirmButtonText: 'ตกลง'
     });
-
   } catch (error) {
     console.error('Error confirming booking:', error);
-    alert('เวลาที่คุณเลือกมีการจองอยู่แล้วโปรดเปลี่ยนเวลาจอง');
+    alert('เวลาที่คุณเลือกมีการจองอยู่แล้วโปรดเปลี่ยนเวลาจองหรือยังไม่ได้Login');
   }
 };
 const filteredEndHours = computed(() => {
@@ -510,42 +528,59 @@ const confirmedForSelectedDate = computed(() => {
 });
 
 // ฟังก์ชัน fetchConfirmedBookings ที่จะดึงข้อมูลการจองที่ยืนยันจาก API
-const fetchAllBookings = async () => {
+const fetchPendingBookingsByRoomId = async (roomId:any) => {
   try {
-    const response = await axios.get('http://localhost:8000/meetingroomBooking/getbooking');
-    confirmedBookings.value = response.data.result; // เก็บข้อมูลการจองทั้งหมด
-    console.log(response.data.result);
+    const response = await axios.get(`http://localhost:8000/meetingroomBooking/getpendingByroomID/${roomId}`);
+    confirmedBookings.value = response.data.bookings;
+    console.log('ข้อมูลการจองของห้อง:', response.data.bookings);
   } catch (error) {
-    console.error('Error fetching all bookings:', error);
+    console.error('Error fetching pending bookings:', error);
   }
 };
 
-// เมื่อคอมโพเนนต์ถูก mounted จะเรียกใช้ฟังก์ชัน fetchConfirmedBookings
-onMounted(async () => {
-  await fetchAllBookings(); // ดึงข้อมูลการจองทั้งหมดแทนที่จะเป็นการจองที่ได้รับการยืนยัน
-});
 
 
 
-const roomDetails = ref(null);
+
+const roomDetails = ref([
+  {
+    detail_id :'',
+    image_url :''
+  },
+  ]);
+
+  const roomDescription = ref<{ description_text: string } | null>(null);
+
 const showRoomDetailsDialog = ref(false);
 
-const fetchRoomDetails = async (roomId) => {
+const fetchRoomDetails = async (roomId:any) => {
   try {
     const response = await axios.get(`http://localhost:8000/meetingrooms/getmeetingroomdetail/${roomId}`);
     if (response.data.status === "success") {
       roomDetails.value = response.data.result;
       console.log('asdasd',response.data.result);
       showRoomDetailsDialog.value = true;
-    } else {
-      alert('ไม่พบรายละเอียดสำหรับห้องประชุมนี้');
-    }
+    } 
   } catch (error) {
     console.error('Error fetching room details:', error);
-    alert('เกิดข้อผิดพลาดในการดึงข้อมูล');
+    await Swal.fire({
+      title: 'เกิดข้อผิดพลาด',
+      text: 'ไม่มีรายละเอียดห้อง!',
+      icon: 'error',
+      confirmButtonText: 'ตกลง'
+    });
+  }
+
+  try {
+    const response = await axios.get(`http://localhost:8000/meetingrooms/getDescriptionByroom/${roomId}`);
+    if (response.data.status === "success") {
+      roomDescription.value = response.data.data;
+      console.log('Room description:', response.data.data);
+    } 
+  } catch (error) {
+    showRoomDetailsDialog.value = false;
   }
 };
-
 
 
 

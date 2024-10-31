@@ -52,22 +52,23 @@
   // Fetch confirmed bookings
   const fetchConfirmedBookings = async () => {
     try {
-      const response = await fetch('http://localhost:8000/meetingroomBooking/get-confirmed-booking', {
+      const response = await fetch('http://localhost:8000/meetingroomBooking/getbooking', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      
       const data = await response.json();
+
   
       if (data.status === 'success') {
-        bookings.value = data.result; // Store the confirmed bookings
+        bookings.value = data.result; 
+        console.log('allbooking',data.result)
       } else {
         error.value = 'Failed to fetch confirmed bookings.';
       }
     } catch (err) {
-      error.value = 'Error fetching data: ' + err.message;
+      error.value = 'Error fetching data: ' + String(err);
     } finally {
       loading.value = false;
     }
@@ -78,7 +79,7 @@
   const calendarOptions = computed(() => ({
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
-    events: bookings.value.map(booking => ({
+    events: bookings.value.map((booking:any )=> ({
       title: `Room ${booking.room_id}  เวลา ${booking.start_time}-${booking.end_time}`,
       start: booking.booking_date,
       end: new Date(new Date(booking.booking_date).setHours(new Date(booking.booking_date).getHours() + getDuration(booking.start_time, booking.end_time))),
