@@ -279,6 +279,9 @@
         <div class="ml-5 mt-5">
           <a class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> ข้อมูลห้องประชุม</a>
         </div>
+        <div class="ml-5 mt-5">
+          <a class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> ข้อมูลห้องประชุม</a>
+        </div>
       </v-card>
     </div>
   </div>
