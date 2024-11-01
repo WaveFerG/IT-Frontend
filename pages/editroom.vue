@@ -154,9 +154,10 @@
     <v-card-text>
       <div v-if="roomDetails">
         <v-row>
-          <v-col v-for="detail in roomDetails" :key="detail.detail_id" cols="4" class="mb-1">
-            <v-img :src="`http://localhost:8000/${detail.image_url}`" height="200" width="100%" />
+          <v-col v-for="detail in roomDetails.details" :key="detail.detail_id" cols="4" class="mb-1">
+          <v-img :src="`http://localhost:8000/${detail.image_url}`" height="200" width="100%" />
           </v-col>
+
         </v-row>
       </div>
       <div v-else>
@@ -169,7 +170,8 @@
       </p>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="red" @click="() => { deleteRoomDetails(selectedRoomId.valueOf) }">ลบรายละเอียดห้อง</v-btn>
+      <v-btn color="red" @click="deleteRoomDetails(selectedRoomId)">ลบรายละเอียดห้อง</v-btn>
+
 
 
 
@@ -578,18 +580,23 @@ const deleteRoom = async (roomId: string) => {
             );
         }
     }
-};
+  };
 
 const showDetailForm = ref(false); // Toggle dialog for room details upload
-const selectedRoomId = ref<number | null>(null); // หรือใช้ string ถ้าต้องการ
+const selectedRoomId = ref(''); // Store room ID for the room being edited
+
 
 
 const roomDetails = ref<{
-  uploadFiles: File[]; // สำหรับเก็บไฟล์รูปภาพ
-  description?: string; // ใช้ ? เพื่อให้รับค่าเป็น undefined ได้
-}>({
+  uploadFiles: File[];
+  details: Array<{
+    detail_id: number;
+    image_url: string;
+  }>;
+  description?: string;
+}>( {
   uploadFiles: [],
-  // description ไม่ต้องกำหนดค่าเริ่มต้นก็ได้ (จะเป็น undefined)
+  details: [], // เพิ่มอาเรย์สำหรับรายละเอียด
 });
 
 
@@ -709,16 +716,17 @@ const fetchRoomDetails = async (roomId: any) => {
   try {
     const response = await axios.get(`http://localhost:8000/meetingrooms/getmeetingroomdetail/${roomId}`);
     if (response.data.status === "success") {
-      roomDetails.value = response.data.result;
+      roomDetails.value.details = response.data.result; // ตั้งค่า details
       showRoomDetailsDialog.value = true;
       console.log('Room Images:', response.data.result);
-    } 
+    }
+    
     const response2 = await axios.get(`http://localhost:8000/meetingrooms/getDescriptionByroom/${roomId}`);
     if (response2.data.status === "success") {
       roomDescription.value = response2.data.data;
       showRoomDetailsDialog.value = true;
       console.log('Room description:', response2.data.data);
-    } 
+    }
   } catch (error) {
     showRoomDetailsDialog.value = false;
     await Swal.fire({
@@ -728,8 +736,8 @@ const fetchRoomDetails = async (roomId: any) => {
       confirmButtonText: 'ตกลง'
     });
   }
-  // Fetch description as before
 };
+
 
 const openDetailForm = async (roomId: string) => {
   console.log("Opening detail form for room ID:", roomId); // Debug log
@@ -756,11 +764,12 @@ const openDetailForm = async (roomId: string) => {
     showDetailForm.value = true; 
   }
 };
-const deleteRoomDetails = async (selectedRoomId: { value: any; }) => {
 
-  const roomId1 = selectedRoomId.value
 
-  if (!roomId1) {
+const deleteRoomDetails = async (selectedRoomId:any) => {
+  console.log("Selected Room ID:", selectedRoomId); // ตรวจสอบค่า
+
+  if (!selectedRoomId) {
     await Swal.fire({
       title: 'เกิดข้อผิดพลาด',
       text: 'ไม่พบห้องประชุมที่เลือก',
@@ -772,22 +781,19 @@ const deleteRoomDetails = async (selectedRoomId: { value: any; }) => {
 
   try {
     // ลบรูปภาพห้องประชุม
-    const deleteImagesResponse = await axios.delete(`http://localhost:8000/meetingrooms/deleteimageRoomDetailByRoomID/${roomId1}`);
+    const deleteImagesResponse = await axios.delete(`http://localhost:8000/meetingrooms/deleteimageRoomDetailByRoomID/${selectedRoomId}`);
     if (deleteImagesResponse.data.status === "success") {
       console.log("ลบรูปภาพสำเร็จ");
     }
 
     // ลบคำอธิบายห้องประชุม
-    const deleteDescriptionResponse = await axios.delete(`http://localhost:8000/meetingrooms/deleteDescription/${roomId1}`);
+    const deleteDescriptionResponse = await axios.delete(`http://localhost:8000/meetingrooms/deleteDescription/${selectedRoomId}`);
     if (deleteDescriptionResponse.data.status === "success") {
       console.log("ลบคำอธิบายสำเร็จ");
     }
 
     // อัปเดตการแสดงผล UI
-    roomDetails.value = {
-  uploadFiles: [],
-  description: '', // หรือ null ตามต้องการ
-};
+    roomDetails.value.uploadFiles = [];
     roomDescription.value = null;
     showRoomDetailsDialog.value = false;
 
