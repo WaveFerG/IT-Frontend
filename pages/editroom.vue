@@ -134,6 +134,8 @@
                       <v-btn  @click="openDetailForm(room.room_id)" color="green" class="text-white ml-3">
                           เพิ่มรายละเอียดห้อง
                        </v-btn>
+                       
+                       
                     </div>
                   </div>
                 </v-card>
@@ -373,9 +375,9 @@ interface Room {
   const filteredBySize = rooms.value.filter(room => {
     const matchesSize = 
       (!selectedSizes.value.small && !selectedSizes.value.medium && !selectedSizes.value.large) || // ถ้าไม่ได้เลือกขนาดใดเลย ให้แสดงทุกขนาด
-      (selectedSizes.value.small && room.capacity < 21) ||
-      (selectedSizes.value.medium && room.capacity >= 21 && room.capacity <= 30) ||
-      (selectedSizes.value.large && room.capacity > 30);
+      (selectedSizes.value.small && room.capacity < 30) ||
+      (selectedSizes.value.medium && room.capacity >= 31 && room.capacity <= 59) ||
+      (selectedSizes.value.large && room.capacity >= 60);
 
     return matchesSize;
   });

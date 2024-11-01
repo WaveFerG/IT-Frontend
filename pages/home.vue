@@ -134,7 +134,7 @@
       <div v-if="roomDetails">
   <v-row>
     <v-col v-for="detail in roomDetails" :key="detail.detail_id" cols="4" class="mb-1">
-      <v-img :src="`http://localhost:8000/${detail.image_url}`" height="200" width="100%" />
+      <v-img :src="`http://localhost:8000/${detail.image_url}`" height="200" width="100%" @click="openImageDialog(detail.image_url)"/>
     </v-col>
   </v-row>
 </div>
@@ -156,6 +156,15 @@
     </v-card-actions>
   </v-card>
 </v-dialog>
+
+<v-dialog v-model="showImageDialog" max-width="60%">
+    <v-card>
+      <v-img :src="`http://localhost:8000/${imageSrc}`" max-height="90vh" />
+      <v-card-actions>
+        <v-btn @click="showImageDialog = false">ปิด</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
 
     <v-dialog v-model="showDialog" max-width="600px">
@@ -319,9 +328,9 @@ const filteredRooms = computed(() => {
   const filteredBySize = rooms.value.filter(room => {
     const matchesSize = 
       (!selectedSizes.value.small && !selectedSizes.value.medium && !selectedSizes.value.large) || // ถ้าไม่ได้เลือกขนาดใดเลย ให้แสดงทุกขนาด
-      (selectedSizes.value.small && room.capacity < 21) ||
-      (selectedSizes.value.medium && room.capacity >= 21 && room.capacity <= 30) ||
-      (selectedSizes.value.large && room.capacity > 30);
+      (selectedSizes.value.small && room.capacity < 30) ||
+      (selectedSizes.value.medium && room.capacity >= 31 && room.capacity <= 59) ||
+      (selectedSizes.value.large && room.capacity >= 60);
 
     return matchesSize;
   });
@@ -582,6 +591,14 @@ const fetchRoomDetails = async (roomId:any) => {
 
 
 
+const showImageDialog = ref(false);
+const imageSrc = ref('');
+
+// ฟังก์ชันเปิด dialog พร้อมตั้งค่า URL ของภาพ
+const openImageDialog = (imageUrl: string) => {
+  imageSrc.value = imageUrl;
+  showImageDialog.value = true;
+};
 
 </script>
 
