@@ -3,7 +3,7 @@
     <v-sheet
       class="mb-80 p-8 max-w-md text-center"
       elevation="5"
-      style="background-color: #eeeeee; border-radius: 20px;"
+      style="background-color: #ffffff; border-radius: 20px;"
     >
       <h1 class="text-3xl font-bold text-green-600 mb-4">ลงทะเบียนสําเร็จ!</h1>
       <svg

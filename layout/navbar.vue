@@ -89,9 +89,9 @@
     <ul class="list-none p-0">
       <li v-for="booking in paginatedBookings" :key="booking.booking_id" class="border-b border-gray-300 py-2 bg-white rounded-md shadow-sm">
         <div class="p-2">
-          <span class="font-bold">Booking ID:</span> {{ booking.booking_id }} - {{ booking.purpose }}<br>
-          <span class="font-semibold">Date:</span> {{ formatDate(booking.booking_date) }} | 
-          <span class="font-semibold">Time:</span> {{ booking.start_time }} - {{ booking.end_time }}
+          <span class="font-bold">ไอดีการจอง:</span> {{ booking.booking_id }} - {{ booking.purpose }}<br>
+          <span class="font-semibold">วันที่:</span> {{ formatDate(booking.booking_date) }} | 
+          <span class="font-semibold">เวลา:</span> {{ booking.start_time }} - {{ booking.end_time }}
         </div>
       </li>
     </ul>

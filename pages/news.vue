@@ -94,7 +94,7 @@
         </v-list-item-content>
 
           <!-- Delete button aligned to the right -->
-          <v-btn icon @click="deleteNews(news.news_id)" color="error">
+          <v-btn icon @click="deleteNews(news.news_id) " style="margin-left: 480px;" color="error">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-list-item>
