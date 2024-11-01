@@ -475,7 +475,6 @@ interface Room {
   }
 };
 
-  
   interface Room {
   room_id: string;
   room_name: string;
@@ -582,10 +581,15 @@ const deleteRoom = async (roomId: string) => {
 };
 
 const showDetailForm = ref(false); // Toggle dialog for room details upload
-const selectedRoomId = ref(''); // Store room ID for the room being edited
+const selectedRoomId = ref<number | null>(null); // หรือใช้ string ถ้าต้องการ
 
-const roomDetails = ref({
-  uploadFiles: [] as File[], // For storing multiple image files
+
+const roomDetails = ref<{
+  uploadFiles: File[]; // สำหรับเก็บไฟล์รูปภาพ
+  description?: string; // ใช้ ? เพื่อให้รับค่าเป็น undefined ได้
+}>({
+  uploadFiles: [],
+  // description ไม่ต้องกำหนดค่าเริ่มต้นก็ได้ (จะเป็น undefined)
 });
 
 
@@ -698,7 +702,7 @@ const uploadRoomDetails = async () => {
 
 
 const showRoomDetailsDialog = ref(false);
-const roomDescription = ref(null);
+const roomDescription = ref<{ description_text?: string } | null>(null);
 
 const fetchRoomDetails = async (roomId: any) => {
   selectedRoomId.value = roomId;
@@ -752,7 +756,7 @@ const openDetailForm = async (roomId: string) => {
     showDetailForm.value = true; 
   }
 };
-const deleteRoomDetails = async (selectedRoomId) => {
+const deleteRoomDetails = async (selectedRoomId: { value: any; }) => {
 
   const roomId1 = selectedRoomId.value
 
@@ -780,7 +784,10 @@ const deleteRoomDetails = async (selectedRoomId) => {
     }
 
     // อัปเดตการแสดงผล UI
-    roomDetails.value = null;
+    roomDetails.value = {
+  uploadFiles: [],
+  description: '', // หรือ null ตามต้องการ
+};
     roomDescription.value = null;
     showRoomDetailsDialog.value = false;
 

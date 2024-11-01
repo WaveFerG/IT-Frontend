@@ -53,7 +53,7 @@
       <p><strong>หัวข้อประชุม:</strong> {{ selectedBooking.purpose }}</p>
       <p><strong>ไอดีการจอง:</strong> {{ selectedBooking.booking_id }}</p>
       <p><strong>ไอดีห้อง:</strong> {{ selectedBooking.room_id }}</p>
-      <p><strong>เวลาที่จอง:</strong> {{ new Date(selectedBooking.booking_date).toLocaleDateString() }}</p>
+      <p><strong>วันที่จอง:</strong> {{ new Date(selectedBooking.booking_date).toLocaleDateString() }}</p>
       <p><strong>เวลาเริ่ม:</strong> {{ selectedBooking.start_time }}</p>
       <p><strong>เวลาสิ้นสุด:</strong> {{ selectedBooking.end_time }}</p>
       <p><strong>สร้างเมื่อ:</strong> {{ selectedBooking.created_at.slice(0, 10) }}</p>
