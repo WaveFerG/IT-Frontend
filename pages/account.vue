@@ -21,6 +21,9 @@
         </v-sheet>
   
         <v-sheet elevation="10" class="bg-white flex-auto" style="max-width: 280px; height: 50vh;">
+          <div class="p-2 ml-5 text-gray-500"> 
+          ติดต่อเรา
+        </div>
         <div class="p-2 ml-5 text-gray-500"> 
           Soradech.ksb@gmail.com
         </div>
@@ -97,7 +100,7 @@
           <a href="/account" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> แก้ไขข้อมูลบัญชี</a>
         </div>
       </v-card>
-      <v-card v-if="user.role && user.role === 'admin'" class="mx-auto my-5" elevation="16" width="250" height="300">
+      <v-card v-if="useraaa && useraaa.role === 'admin'" class="mx-auto my-5" elevation="16" width="250" height="300">
         <v-card-title class="bg-blue text-center">ส่วนของผู้ดูแลระบบ</v-card-title>
         <div class="ml-5 mt-7">
           <a href="/bookingcalendar" class="hover:bg-blue-100 hover:text-blue-800 duration-300 ease-in-out p-2 rounded-lg"><v-icon>mdi-chevron-right</v-icon> จัดการการจองในปฏิทิน</a>
@@ -169,7 +172,6 @@
     email: '',
     phone_number: '',
     department: '',
-    role: ''
   });
   
   // Edit user data
@@ -182,6 +184,21 @@
     department: ''
   });
   
+
+
+  const useraaa = ref<any>(null);
+
+onMounted(() => {
+  const userData = localStorage.getItem('user');
+  console.log('asdasd',userData)
+
+  if (userData) {
+    useraaa.value = JSON.parse(userData);
+  }
+    
+});
+
+
   // Edit dialog state
   const editDialog = ref(false);
   

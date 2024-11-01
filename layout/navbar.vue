@@ -21,7 +21,6 @@
         </v-col>
 
         <v-col class="flex items-center justify-end">
-          <v-icon class="mr-5">mdi-help-circle</v-icon>
           <v-icon class="mr-5" @click="showDialog = true">mdi-bell</v-icon>
           <v-btn href="/account">
             <v-icon>mdi-account</v-icon>
@@ -84,7 +83,7 @@
         </div>
 
       <v-col md="5" class="bg-green-400 mt-7 ml-16 p-4">
-  <h2 class="text-h6">User Bookings Confirm</h2>
+  <h2 class="text-h6">การจองที่ได้รับการยืนยันแล้ว</h2>
   <div>
     <!-- Show only paginated bookings -->
     <ul class="list-none p-0">

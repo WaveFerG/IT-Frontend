@@ -41,7 +41,7 @@
       <v-dialog v-model="dialog" max-width="600px">
   <v-card>
     <div class="flex justify-between">
-    <v-card-title>Booking Details </v-card-title>
+    <v-card-title>รายละเอียดการจอง </v-card-title>
     <v-icon class="p-5" @click="dialog = false" style="cursor: pointer;">
         mdi-close
       </v-icon>
@@ -50,33 +50,33 @@
   <div class="flex justify-between">
     <!-- Booking Details Section -->
     <div >
-      <p><strong>Purpose:</strong> {{ selectedBooking.purpose }}</p>
-      <p><strong>Booking ID:</strong> {{ selectedBooking.booking_id }}</p>
-      <p><strong>Room ID:</strong> {{ selectedBooking.room_id }}</p>
-      <p><strong>Booking Date:</strong> {{ new Date(selectedBooking.booking_date).toLocaleDateString() }}</p>
-      <p><strong>Start Time:</strong> {{ selectedBooking.start_time }}</p>
-      <p><strong>End Time:</strong> {{ selectedBooking.end_time }}</p>
-      <p><strong>Created_at:</strong> {{ selectedBooking.created_at.slice(0, 10) }}</p>
-      <p><strong>Updated_at:</strong> {{ selectedBooking.updated_at.slice(0, 10) }}</p>
+      <p><strong>หัวข้อประชุม:</strong> {{ selectedBooking.purpose }}</p>
+      <p><strong>ไอดีการจอง:</strong> {{ selectedBooking.booking_id }}</p>
+      <p><strong>ไอดีห้อง:</strong> {{ selectedBooking.room_id }}</p>
+      <p><strong>เวลาที่จอง:</strong> {{ new Date(selectedBooking.booking_date).toLocaleDateString() }}</p>
+      <p><strong>เวลาเริ่ม:</strong> {{ selectedBooking.start_time }}</p>
+      <p><strong>เวลาสิ้นสุด:</strong> {{ selectedBooking.end_time }}</p>
+      <p><strong>สร้างเมื่อ:</strong> {{ selectedBooking.created_at.slice(0, 10) }}</p>
+      <p><strong>อัพเเดทเมื่อ:</strong> {{ selectedBooking.updated_at.slice(0, 10) }}</p>
     </div>
 
     <!-- User Information Section -->
     <div v-if="user">
-        <p class="ml-10 mb-3"><strong>User</strong></p>
-        <p><strong>User Id:</strong> {{ user.user_id }}</p>
-      <p><strong>First Name:</strong> {{ user.firstname }}</p>
-      <p><strong>Last Name:</strong> {{ user.lastname }}</p>
-      <p><strong>Username:</strong> {{ user.username }}</p>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Phone:</strong> {{ user.phone_number }}</p>
+        <p class="ml-10 mb-3"><strong>ผู้ใช้</strong></p>
+        <p><strong>ไอดีผู้ใช้:</strong> {{ user.user_id }}</p>
+      <p><strong>ชื่อจริง:</strong> {{ user.firstname }}</p>
+      <p><strong>นามสกุล:</strong> {{ user.lastname }}</p>
+      <p><strong>ชื่อผู้ใช้:</strong> {{ user.username }}</p>
+      <p><strong>อีเมล:</strong> {{ user.email }}</p>
+      <p><strong>เบอร์โทรศัพท์:</strong> {{ user.phone_number }}</p>
       <p><strong>Role:</strong> {{ user.role }}</p>
     </div>
   </div>
 </v-card-text>
 <v-card-actions>
   
-  <v-btn color="green" @click="confirmBooking(selectedBooking.booking_id)">Confirm Booking</v-btn> <!-- ปุ่ม Confirm -->
-  <v-btn color="red" @click="cancleBooking(selectedBooking.booking_id)">Cancel Booking</v-btn> <!-- ปุ่ม Cancel -->
+  <v-btn color="green" @click="confirmBooking(selectedBooking.booking_id)">คอนเฟิร์มการจองนี้</v-btn> <!-- ปุ่ม Confirm -->
+  <v-btn color="red" @click="cancleBooking(selectedBooking.booking_id)">ยกเลิกการจองนี้</v-btn> <!-- ปุ่ม Cancel -->
 </v-card-actions>
   </v-card>
 </v-dialog>

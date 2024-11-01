@@ -69,19 +69,19 @@
   </template>
   <v-list>
     <v-list-item>
-      <v-checkbox label="Internet" v-model="selectedEquipments.internet"></v-checkbox>
+      <v-checkbox label="อินเทอร์เน็ต" v-model="selectedEquipments.internet"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="Microphone" v-model="selectedEquipments.microphone"></v-checkbox>
+      <v-checkbox label="ไมค์โครโฟน" v-model="selectedEquipments.microphone"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="Projector" v-model="selectedEquipments.projector"></v-checkbox>
+      <v-checkbox label="โปรเจคเตอร์" v-model="selectedEquipments.projector"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="White board" v-model="selectedEquipments.whiteboard"></v-checkbox>
+      <v-checkbox label="กระดานไวท์บอร์ด" v-model="selectedEquipments.whiteboard"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="Power outlet" v-model="selectedEquipments.poweroutlet"></v-checkbox>
+      <v-checkbox label="ปลั๊กไฟ" v-model="selectedEquipments.poweroutlet"></v-checkbox>
     </v-list-item>
   </v-list>
 </v-menu>
@@ -106,20 +106,21 @@
         <div class="mt-5">
           <v-container>
             <v-row>
-              <v-col v-for="room in filteredRooms" :key="room.room_id" class="mb-5" cols="12">
+              <v-col v-for="room in filteredRooms" :key="room.room_id" class="mb-2" cols="12">
                 <v-card class="rounded-xl overflow-hidden shadow-lg" style="display: flex; height: auto; width: 1300px;">
                   <div class="m-5" style="width: 500px; height: 320px">
                     <v-img :src="`http://localhost:8000/${room.room_image}`" height="100%" width="100%" cover />
                   </div>
   
-                  <div class="flex-1 pt-5">
-                    <v-card-title class="text-lg font-semibold">{{ room.room_name }}</v-card-title>
+                  <div class="flex-1 pt-5 ml-7">
+                    <v-card-title class="text-lg font-semibold ">{{ room.room_name }}</v-card-title>
+                    <h1 class="mb-5">ไอดีห้อง : {{ room.room_id }}<br></h1>
                     <h1 class="mb-5">ขนาดบรรจุ: {{ room.capacity }}<br></h1>
                     <h1 class="mb-5">ที่ตั้ง: {{ room.location }}<br></h1>
                     <h1 class="mb-5">สิ่งอำนวยความสะดวก: {{ room.amenities }}<br></h1>
                   
   
-                    <div style="margin-top:65px;">
+                    <div style="margin-top:20px;">
                       <v-btn class="m-3" color="#3399FF" @click="editRoom(room)">แก้ไขห้อง</v-btn>
                       <v-btn @click="deleteRoom(room.room_id)" color="red" class="text-white">ลบห้อง</v-btn>
                     
@@ -127,7 +128,7 @@
                     </div>
                     <div>
                       <v-btn color="#778899" class="text-white ml-3 " @click="fetchRoomDetails(room.room_id)">
-                          แก้ไขรายละเอียดห้อง
+                          ดูรายละเอียดห้อง
                        </v-btn>
 
                       <v-btn  @click="openDetailForm(room.room_id)" color="green" class="text-white ml-3">
@@ -380,11 +381,11 @@ interface Room {
   // ฟิลเตอร์ตามอุปกรณ์ที่เลือก
   const filteredByEquipment = filteredBySize.filter(room => {
     const matchesEquipments = 
-      (!selectedEquipments.value.internet || room.amenities.includes("Internet")) &&
-      (!selectedEquipments.value.microphone || room.amenities.includes("Microphone")) &&
-      (!selectedEquipments.value.projector || room.amenities.includes("Projector")) &&
-      (!selectedEquipments.value.whiteboard || room.amenities.includes("White board")) &&
-      (!selectedEquipments.value.poweroutlet || room.amenities.includes("Power outlet"));
+      (!selectedEquipments.value.internet || room.amenities.includes("อินเทอร์เน็ต")) &&
+      (!selectedEquipments.value.microphone || room.amenities.includes("ไมค์โครโฟน")) &&
+      (!selectedEquipments.value.projector || room.amenities.includes("โปรเจคเตอร์")) &&
+      (!selectedEquipments.value.whiteboard || room.amenities.includes("กระดานไวท์บอร์ด")) &&
+      (!selectedEquipments.value.poweroutlet || room.amenities.includes("ปลั๊กไฟ"));
 
     return matchesEquipments;
   });

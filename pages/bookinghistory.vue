@@ -22,6 +22,9 @@
       </v-sheet>
 
       <v-sheet elevation="10" class="bg-white flex-auto" style="max-width: 280px; height: 50vh;">
+        <div class="p-2 ml-5 text-gray-500"> 
+          ติดต่อเรา
+        </div>
         <div class="p-2 ml-5 text-gray-500">
           Soradech.ksb@gmail.com
         </div>
@@ -54,7 +57,7 @@
           <a class="font-semibold">ประวัติข้อมูลการจองห้อง</a>
         </v-card-title>
         <v-row class="ml-5">
-          <v-col md="1" class="font-semibold border-b-md mt-1">ID</v-col>
+          <v-col md="1" class="font-semibold border-b-md mt-1">ไอดี</v-col>
           <v-col md="2" class="font-semibold border-b-md mt-1">หัวข้อประชุม</v-col>
           <v-col md="2" class="font-semibold border-b-md mt-1">วันที่จองไว้</v-col>
           <v-col md="2" class="font-semibold border-b-md mt-1">วันและเวลาที่เริ่ม</v-col>
@@ -97,7 +100,7 @@
   <v-card>
     <v-card-title class="headline">{{ selectedRoom?.purpose }}</v-card-title>
     <v-card-text>
-      <div><strong>ID:</strong> {{ selectedRoom?.booking_id }}</div>
+      <div><strong>ไอดีการจอง:</strong> {{ selectedRoom?.booking_id }}</div>
       <div><strong>หัวข้อประชุม:</strong> {{ selectedRoom?.purpose }}</div>
       <div><strong>วันที่จองไว้:</strong> {{ selectedRoom?.booking_date.slice(0, 10) }}</div>
       <div><strong>วันและเวลาที่เริ่ม:</strong> {{ selectedRoom?.start_time }}</div>

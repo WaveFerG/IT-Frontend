@@ -23,7 +23,7 @@
 
       <v-sheet elevation="10" class="bg-white flex-auto" style="max-width: 280px; height: 100dvh;">
         <div class="p-2 ml-5 text-gray-500"> 
-          Contact us
+          ติดต่อเรา
         </div>
         <div class="p-2 ml-5 text-gray-500"> 
           Soradech.ksb@gmail.com
@@ -68,19 +68,19 @@
   </template>
   <v-list>
     <v-list-item>
-      <v-checkbox label="Internet" v-model="selectedEquipments.internet"></v-checkbox>
+      <v-checkbox label="อินเทอร์เน็ต" v-model="selectedEquipments.internet"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="Microphone" v-model="selectedEquipments.microphone"></v-checkbox>
+      <v-checkbox label="ไมค์โครโฟน" v-model="selectedEquipments.microphone"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="Projector" v-model="selectedEquipments.projector"></v-checkbox>
+      <v-checkbox label="โปรเจคเตอร์" v-model="selectedEquipments.projector"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="White board" v-model="selectedEquipments.whiteboard"></v-checkbox>
+      <v-checkbox label="กระดานไวท์บอร์ด" v-model="selectedEquipments.whiteboard"></v-checkbox>
     </v-list-item>
     <v-list-item>
-      <v-checkbox label="Power outlet" v-model="selectedEquipments.poweroutlet"></v-checkbox>
+      <v-checkbox label="ปลั๊กไฟ" v-model="selectedEquipments.poweroutlet"></v-checkbox>
     </v-list-item>
   </v-list>
 </v-menu>
@@ -101,12 +101,12 @@
       <div class="mt-5">
         <v-container>
           <v-row>
-            <v-col v-for="room in filteredRooms" :key="room.room_id" class="mb-5" cols="12">
+            <v-col v-for="room in filteredRooms" :key="room.room_id" class="mb-2" cols="12">
               <v-card class="rounded-xl overflow-hidden shadow-lg" style="display: flex;  width: 1100px; height: auto;">
                 <div class="m-5" style="width: 500px; height: 320px">
                   <v-img :src="`http://localhost:8000/${room.room_image}`" height="100%" width="100%" cover />
                 </div>
-                <div class="flex-1 pt-5 ml-10">
+                <div class="flex-1 pt-5 ml-7">
                   <v-card-title class="text-lg font-semibold mb-3">{{ room.room_name }}</v-card-title>
                   <h1 class="mb-5">ไอดีห้อง : {{ room.room_id }}<br></h1>
                   <h1 class="mb-5">ขนาดบรรจุ: {{ room.capacity }}<br></h1>
@@ -329,11 +329,11 @@ const filteredRooms = computed(() => {
   // ฟิลเตอร์ตามอุปกรณ์ที่เลือก
   const filteredByEquipment = filteredBySize.filter(room => {
     const matchesEquipments = 
-      (!selectedEquipments.value.internet || room.amenities.includes("Internet")) &&
-      (!selectedEquipments.value.microphone || room.amenities.includes("Microphone")) &&
-      (!selectedEquipments.value.projector || room.amenities.includes("Projector")) &&
-      (!selectedEquipments.value.whiteboard || room.amenities.includes("White board")) &&
-      (!selectedEquipments.value.poweroutlet || room.amenities.includes("Power outlet"));
+      (!selectedEquipments.value.internet || room.amenities.includes("อินเทอร์เน็ต")) &&
+      (!selectedEquipments.value.microphone || room.amenities.includes("ไมค์โครโฟน")) &&
+      (!selectedEquipments.value.projector || room.amenities.includes("โปรเจคเตอร์")) &&
+      (!selectedEquipments.value.whiteboard || room.amenities.includes("กระดานไวท์บอร์ด")) &&
+      (!selectedEquipments.value.poweroutlet || room.amenities.includes("ปลั๊กไฟ"));
 
     return matchesEquipments;
   });
