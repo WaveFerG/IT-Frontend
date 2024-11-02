@@ -188,7 +188,7 @@ const fetchUser = async (userId: string) => {
 
 
   if (!userId) {
-  console.warn('No user ID found for this booking. Please check the booking data.');
+  console.warn('ไม่พบ ID ผู้ใช้สําหรับการจองนี้ โปรดตรวจสอบข้อมูลการจอง');
 } else {
   fetchUser(userId);
 }
@@ -254,8 +254,8 @@ const confirmBooking = async (bookingId: string) => {
     if (response.ok) {
       Swal.fire({
         icon: 'success',
-        title: 'Booking Confirmed',
-        text: 'The booking has been confirmed successfully!',
+        title: 'ยืนยันการจองแล้ว',
+        text: 'การจองได้รับการยืนยันเรียบร้อยแล้ว!',
         timer: 2000,
         showConfirmButton: false,
       });
@@ -265,14 +265,14 @@ const confirmBooking = async (bookingId: string) => {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: `Failed to confirm the booking: ${data.message}`,
+        text: `ไม่สามารถยืนยันการจองได้: ${data.message}`,
       });
     }
   } catch (error) {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: `An error occurred: ${String(error)}`,
+      text: `เกิดข้อผิดพลาด: ${String(error)}`,
     });
   }
 };
@@ -293,8 +293,8 @@ const cancleBooking = async (bookingId: string) => {
     if (response.ok) {
       Swal.fire({
         icon: 'success',
-        title: 'Booking Cancelled',
-        text: 'The booking has been cancelled successfully!',
+        title: 'การจองถูกยกเลิก',
+        text: 'การจองถูกยกเลิกเรียบร้อยแล้ว!',
         timer: 2000,
         showConfirmButton: false,
       });
@@ -304,14 +304,14 @@ const cancleBooking = async (bookingId: string) => {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: `Failed to cancel the booking: ${data.message}`,
+        text: `ไม่สามารถยกเลิกการจองได้: ${data.message}`,
       });
     }
   } catch (error) {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: `An error occurred: ${String(error)}`,
+      text: `เกิดข้อผิดพลาด: ${String(error)}`,
     });
   }
 };

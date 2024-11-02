@@ -80,8 +80,8 @@
             <v-text-field v-model="repeatPassword" label="ใส่รหัสผ่านใหม่อีกครั้ง" type="password" required></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn text @click="resetPasswordDialog = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="submitResetPassword">Submit</v-btn>
+            <v-btn text @click="resetPasswordDialog = false">ยกเลิก</v-btn>
+            <v-btn text color="primary" @click="submitResetPassword">ยืนยัน</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
